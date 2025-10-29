@@ -1,14 +1,23 @@
 #!/bin/bash
 
+# Clear nohup.out
 > nohup.out
 
+# Run SQL commands
 mysql -u root <<EOF
 USE graveyard;
 
-ALTER TABLE hashes CHANGE password_hash passwords VARCHAR(255);
-DELETE FROM hashes;
+-- Rename the table
+RENAME TABLE hashes TO passwords;
 
-INSERT INTO hashes (id, passwords) VALUES
+-- Rename the column
+ALTER TABLE passwords CHANGE password_hash passwords VARCHAR(255);
+
+-- Delete all existing rows
+DELETE FROM passwords;
+
+-- Insert new rows
+INSERT INTO passwords (id, passwords) VALUES
 (1, 'not here'),
 (2, 'nope'),
 (3, 'no'),
